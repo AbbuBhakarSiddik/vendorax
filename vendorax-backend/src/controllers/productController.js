@@ -139,3 +139,31 @@ exports.deleteProductImage = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+exports.getTrendingProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ stock: { $gt: 0 } })
+      .populate('storeId', 'storeName storeSlug')
+      .sort({ createdAt: -1 })
+      .limit(8)
+    res.json({ products })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.searchProducts = async (req, res) => {
+  try {
+    const { q, category } = req.query
+    const query = { stock: { $gt: 0 } }
+    if (q) query.name = { $regex: q, $options: 'i' }
+    if (category) query.category = { $regex: category, $options: 'i' }
+    const products = await Product.find(query)
+      .populate('storeId', 'storeName storeSlug')
+      .sort({ createdAt: -1 })
+      .limit(20)
+    res.json({ products })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}

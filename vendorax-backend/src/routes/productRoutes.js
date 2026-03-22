@@ -1,13 +1,21 @@
 const express = require('express')
 const router = express.Router()
+
 const {
-  createProduct, getMyProducts, updateProduct,
-  deleteProduct, getProductsByStore, getSingleProduct
+  createProduct, getMyProducts, updateProduct, deleteProduct,
+  getProductsByStore, getSingleProduct,
+  uploadProductImage, deleteProductImage,
+  getTrendingProducts, searchProducts
 } = require('../controllers/productController')
+
+
 const { protect } = require('../middleware/authMiddleware')
 const { checkRole } = require('../middleware/roleMiddleware')
 const { upload } = require('../config/cloudinary')
-const { uploadProductImage, deleteProductImage } = require('../controllers/productController')
+
+
+router.get('/trending', getTrendingProducts)
+router.get('/search', searchProducts)
 
 router.post('/', protect, checkRole('seller'), createProduct)
 router.get('/my', protect, checkRole('seller'), getMyProducts)

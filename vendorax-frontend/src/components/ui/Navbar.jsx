@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import useAuthStore from '../../store/useAuthStore'
+import useCartStore from '../../store/useCartStore'
 
 const Navbar = () => {
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
+  const cartCount = useCartStore(s => s.getCount())
 
   const handleLogout = () => {
     logout()
@@ -35,8 +37,13 @@ const Navbar = () => {
               </Link>
             )}
             {user.role === 'buyer' && (
-              <Link to="/cart" className="text-sm text-gray-600 hover:text-purple-600">
+              <Link to="/cart" className="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1">
                 Cart
+                {cartCount > 0 && (
+                  <span className="bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
               </Link>
             )}
             <div className="flex items-center gap-3">

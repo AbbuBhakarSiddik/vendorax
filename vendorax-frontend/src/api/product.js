@@ -13,3 +13,6 @@ export const uploadProductImage = (formData) =>
 
 export const deleteProductImage = (public_id) =>
   api.delete('/products/delete-image', { data: { public_id } })
+
+export const getTrendingProducts = () => api.get('/products/trending')
+export const searchProducts = (params) => api.get('/products/search', { params }) 

@@ -21,8 +21,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.clear()
-      window.location.href = '/login'
+      const url = error.config.url
+      if (url.includes('/auth/') === false) {
+        localStorage.clear()
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }

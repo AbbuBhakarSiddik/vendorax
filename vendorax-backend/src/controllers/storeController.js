@@ -79,3 +79,33 @@ exports.getStoreBySlug = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+exports.getFeaturedStores = async (req, res) => {
+  try {
+    const stores = await Store.find({ isFeatured: true, isActive: true })
+      .populate('sellerId', 'name')
+      .limit(6)
+    res.json({ stores })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getAllStores = async (req, res) => {
+  try {
+    const { search, page = 1, limit = 12 } = req.query
+    const query = { isActive: true }
+    if (search) {
+      query.storeName = { $regex: search, $options: 'i' }
+    }
+    const stores = await Store.find(query)
+      .populate('sellerId', 'name')
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+    const total = await Store.countDocuments(query)
+    res.json({ stores, total, page: Number(page), pages: Math.ceil(total / limit) })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
