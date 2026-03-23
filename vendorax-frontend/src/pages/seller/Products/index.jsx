@@ -3,6 +3,7 @@ import {
   getMyProducts, createProduct, updateProduct,
   deleteProduct, uploadProductImage, deleteProductImage
 } from '../../../api/product'
+import { generateDescription, generateTags } from '../../../api/ai'
 
 const emptyForm = { name: '', description: '', price: '', category: '', stock: '', tags: '' }
 
@@ -16,6 +17,8 @@ const SellerProducts = () => {
   const [editingId, setEditingId] = useState(null)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [aiDescLoading, setAiDescLoading] = useState(false)
+  const [aiTagsLoading, setAiTagsLoading] = useState(false)
 
   const fetchProducts = async () => {
     try {
@@ -126,7 +129,50 @@ const SellerProducts = () => {
       setError('Failed to delete product')
     }
   }
+  const handleAiDescription = async () => {
+    if (!form.name) {
+      setError('Enter a product name first')
+      return
+    }
+    setAiDescLoading(true)
+    setError('')
+    try {
+      const res = await generateDescription({
+        productName: form.name,
+        features: form.category || form.name
+      })
+      setForm(prev => ({ ...prev, description: res.data.description }))
+    } catch {
+      setError('AI generation failed. Try again.')
+    } finally {
+      setAiDescLoading(false)
+    }
+  }
 
+  const handleAiTags = async () => {
+    if (!form.name) {
+      setError('Enter a product name first')
+      return
+    }
+    setAiTagsLoading(true)
+    setError('')
+    try {
+      const res = await generateTags({
+        productName: form.name,
+        description: form.description,
+        category: form.category
+      })
+      setForm(prev => ({
+        ...prev,
+        tags: res.data.tags.join(', '),
+        category: res.data.category || prev.category
+      }))
+    } catch {
+      setError('AI generation failed. Try again.')
+    } finally {
+      setAiTagsLoading(false)
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-10">
@@ -189,18 +235,40 @@ const SellerProducts = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="text-sm font-medium text-gray-700">Description</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-sm font-medium text-gray-700">Description</label>
+                  <button type="button" onClick={handleAiDescription} disabled={aiDescLoading}
+                    className="text-xs text-purple-600 border border-purple-200 px-2.5 py-1 rounded-lg hover:bg-purple-50 transition disabled:opacity-50 flex items-center gap-1">
+                    {aiDescLoading ? (
+                      <>
+                        <div className="w-3 h-3 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                        Generating...
+                      </>
+                    ) : '✨ AI generate'}
+                  </button>
+                </div>
                 <textarea name="description" rows={3} value={form.description} onChange={handleChange}
-                  placeholder="Describe your product..."
+                  placeholder="Describe your product or use AI to generate..."
                   className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none" />
               </div>
 
               <div className="md:col-span-2">
-                <label className="text-sm font-medium text-gray-700">Tags
-                  <span className="text-gray-400 font-normal ml-1">(comma separated)</span>
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-sm font-medium text-gray-700">Tags
+                    <span className="text-gray-400 font-normal ml-1">(comma separated)</span>
+                  </label>
+                  <button type="button" onClick={handleAiTags} disabled={aiTagsLoading}
+                    className="text-xs text-purple-600 border border-purple-200 px-2.5 py-1 rounded-lg hover:bg-purple-50 transition disabled:opacity-50 flex items-center gap-1">
+                    {aiTagsLoading ? (
+                      <>
+                        <div className="w-3 h-3 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                        Generating...
+                      </>
+                    ) : '✨ AI suggest'}
+                  </button>
+                </div>
                 <input name="tags" value={form.tags} onChange={handleChange}
-                  placeholder="e.g. fresh, homemade, vegan"
+                  placeholder="e.g. fresh, homemade, vegan — or use AI suggest"
                   className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
               </div>
 

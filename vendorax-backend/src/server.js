@@ -17,6 +17,7 @@ app.use('/api/v1/auth', require('./routes/authRoutes'))
 app.use('/api/v1/stores', require('./routes/storeRoutes'))
 app.use('/api/v1/products', require('./routes/productRoutes'))
 app.use('/api/v1/orders', require('./routes/orderRoutes'))
+app.use('/api/v1/ai', require('./routes/aiRoutes'))
 
 app.get('/', (req, res) => {
   res.json({ message: 'VendoraX API is running' })
