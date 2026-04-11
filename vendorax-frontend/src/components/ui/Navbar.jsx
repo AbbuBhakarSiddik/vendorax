@@ -32,9 +32,20 @@ const Navbar = () => {
               </Link>
             )}
             {user.role === 'admin' && (
-              <Link to="/admin/dashboard" className="text-sm text-gray-600 hover:text-purple-600">
-                Admin
-              </Link>
+              <div className="flex items-center gap-4">
+                <Link to="/admin/dashboard"
+                  className="text-sm text-gray-600 hover:text-purple-600">
+                  Dashboard
+                </Link>
+                <Link to="/admin/stores"
+                  className="text-sm text-gray-600 hover:text-purple-600">
+                  Stores
+                </Link>
+                <Link to="/admin/users"
+                  className="text-sm text-gray-600 hover:text-purple-600">
+                  Users
+                </Link>
+              </div>
             )}
             {user.role === 'buyer' && (
               <Link to="/cart" className="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1">
