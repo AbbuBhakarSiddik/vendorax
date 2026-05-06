@@ -28,6 +28,8 @@ const orderSchema = new mongoose.Schema({
     enum: ['razorpay', 'stripe', 'upi'],
     default: 'razorpay'
   },
+  razorpayOrderId: { type: String },
+  razorpayPaymentId: { type: String },
   orderStatus: {
     type: String,
     enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],

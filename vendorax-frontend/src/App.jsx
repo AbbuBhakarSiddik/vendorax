@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import useSocket from './hooks/useSocket'
 import ProtectedRoute from './components/ui/ProtectedRoute'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -20,6 +21,8 @@ import Navbar from './components/ui/Navbar'
 import CreateStore from './pages/seller/Dashboard/CreateStore'
 
 function App() {
+  useSocket()
+
   return (
     <BrowserRouter>
       <Navbar />

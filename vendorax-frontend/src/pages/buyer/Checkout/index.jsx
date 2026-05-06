@@ -4,6 +4,17 @@ import useCartStore from '../../../store/useCartStore'
 import useAuthStore from '../../../store/useAuthStore'
 import api from '../../../api/axiosInstance'
 
+// Load Razorpay script dynamically
+const loadRazorpayScript = () =>
+  new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true)
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
+
 const Checkout = () => {
   const navigate = useNavigate()
   const { items, getTotal, clearCart } = useCartStore()
@@ -20,61 +31,108 @@ const Checkout = () => {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (items.length === 0 && !orderPlaced.current) {
-      navigate('/')
-    }
+    if (items.length === 0 && !orderPlaced.current) navigate('/')
   }, [items, navigate])
 
   if (items.length === 0 && !orderPlaced.current) return null
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+
     try {
-      const orders = {}
-      items.forEach(item => {
-        const storeId = item.storeId?._id || item.storeId
-        if (!orders[storeId]) orders[storeId] = []
-        orders[storeId].push(item)
-      })
-
-      console.log('Orders grouped:', orders)
-
-      for (const storeId of Object.keys(orders)) {
-        const storeItems = orders[storeId]
-        const total = storeItems.reduce((sum, i) => sum + i.price * i.qty, 0)
-
-        const payload = {
-          storeId,
-          products: storeItems.map(i => ({
-            productId: i._id,
-            name: i.name,
-            price: i.price,
-            qty: i.qty
-          })),
-          totalAmount: total,
-          paymentStatus: 'paid',
-          paymentGateway: 'razorpay',
-          shippingAddress: form
-        }
-
-        console.log('Sending order payload:', payload)
-        const res = await api.post('/orders', payload)
-        console.log('Order response:', res.data)
+      // Load Razorpay SDK
+      const sdkLoaded = await loadRazorpayScript()
+      if (!sdkLoaded) {
+        setError('Failed to load payment gateway. Please check your connection.')
+        setLoading(false)
+        return
       }
 
-      console.log('All orders placed, navigating...')
+      // Group items by store
+      const byStore = {}
+      items.forEach(item => {
+        const storeId = item.storeId?._id || item.storeId
+        if (!byStore[storeId]) byStore[storeId] = []
+        byStore[storeId].push(item)
+      })
+
+      // Process each store's order sequentially
+      for (const storeId of Object.keys(byStore)) {
+        const storeItems = byStore[storeId]
+        const total = storeItems.reduce((sum, i) => sum + i.price * i.qty, 0)
+
+        const products = storeItems.map(i => ({
+          productId: i._id,
+          name: i.name,
+          price: i.price,
+          qty: i.qty
+        }))
+
+        // 1. Initiate payment — get Razorpay order ID from backend
+        const { data } = await api.post('/orders/payment/initiate', {
+          storeId,
+          products,
+          totalAmount: total,
+          shippingAddress: form
+        })
+
+        // 2. Open Razorpay popup
+        await new Promise((resolve, reject) => {
+          const options = {
+            key: data.keyId,
+            amount: data.amount,
+            currency: data.currency,
+            name: 'VendoraX',
+            description: `Order from store`,
+            order_id: data.razorpayOrderId,
+            prefill: {
+              name: form.fullName,
+              contact: form.phone,
+              email: user?.email || ''
+            },
+            theme: { color: '#7C3AED' },
+            handler: async (response) => {
+              try {
+                // 3. Verify payment on backend — this creates the DB order
+                await api.post('/orders/payment/verify', {
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  orderData: data.orderData
+                })
+                resolve()
+              } catch (err) {
+                reject(err)
+              }
+            },
+            modal: {
+              ondismiss: () => reject(new Error('Payment cancelled by user'))
+            }
+          }
+
+          const rzp = new window.Razorpay(options)
+          rzp.on('payment.failed', (response) => {
+            reject(new Error(response.error.description || 'Payment failed'))
+          })
+          rzp.open()
+        })
+      }
+
+      // All orders paid and created
       orderPlaced.current = true
       clearCart()
       navigate('/orders', { replace: true })
+
     } catch (err) {
-      console.error('Order error:', err)
-      setError(err.response?.data?.message || 'Failed to place order')
+      if (err.message === 'Payment cancelled by user') {
+        setError('Payment was cancelled. Your cart is still saved.')
+      } else {
+        setError(err.response?.data?.message || err.message || 'Something went wrong')
+      }
     } finally {
       setLoading(false)
     }
@@ -133,23 +191,17 @@ const Checkout = () => {
 
                 {/* Payment method */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
-                    Payment method
-                  </label>
+                  <label className="text-sm font-medium text-gray-700 block mb-2">Payment method</label>
                   <div className="border border-purple-200 bg-purple-50 rounded-lg px-4 py-3 flex items-center gap-3">
                     <div className="w-3 h-3 rounded-full bg-purple-600" />
-                    <span className="text-sm text-purple-800 font-medium">
-                      Razorpay — Test mode
-                    </span>
-                    <span className="text-xs text-purple-500 ml-auto">
-                      No real payment
-                    </span>
+                    <span className="text-sm text-purple-800 font-medium">Razorpay</span>
+                    <span className="text-xs text-purple-500 ml-auto">Cards · UPI · Net banking · Wallets</span>
                   </div>
                 </div>
 
                 <button type="submit" disabled={loading}
                   className="w-full bg-purple-600 text-white py-3 rounded-xl text-sm font-medium hover:bg-purple-700 transition disabled:opacity-60 mt-2">
-                  {loading ? 'Placing order...' : `Place order · ₹${getTotal().toLocaleString()}`}
+                  {loading ? 'Preparing payment...' : `Pay ₹${getTotal().toLocaleString()}`}
                 </button>
               </form>
             </div>
@@ -169,13 +221,9 @@ const Checkout = () => {
                       <div className="w-12 h-12 bg-gray-100 rounded-lg shrink-0" />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-gray-800 line-clamp-1">
-                        {item.name}
-                      </p>
+                      <p className="text-xs font-medium text-gray-800 line-clamp-1">{item.name}</p>
                       <p className="text-xs text-gray-500">Qty: {item.qty}</p>
-                      <p className="text-xs font-bold text-purple-700">
-                        ₹{(item.price * item.qty).toLocaleString()}
-                      </p>
+                      <p className="text-xs font-bold text-purple-700">₹{(item.price * item.qty).toLocaleString()}</p>
                     </div>
                   </div>
                 ))}

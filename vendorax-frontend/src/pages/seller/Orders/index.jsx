@@ -19,7 +19,6 @@ const NEXT_STATUS = {
 const SellerOrders = () => {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
-    const [store, setStore] = useState(null)
     const [updating, setUpdating] = useState(null)
     const [filter, setFilter] = useState('all')
     const [error, setError] = useState('')
@@ -27,7 +26,6 @@ const SellerOrders = () => {
     const fetchOrders = async () => {
         try {
             const storeRes = await getMyStore()
-            setStore(storeRes.data.store)
             const ordersRes = await api.get(`/orders/store/${storeRes.data.store._id}`)
             setOrders(ordersRes.data.orders)
         } catch {
