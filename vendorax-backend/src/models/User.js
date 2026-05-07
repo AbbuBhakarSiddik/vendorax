@@ -23,6 +23,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['buyer', 'seller', 'admin'],
     default: 'buyer'
+  },
+  savedAddress: {
+    fullName: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    address: { type: String, default: '' },
+    city: { type: String, default: '' },
+    pincode: { type: String, default: '' }
   }
 }, { timestamps: true })
 

@@ -11,7 +11,6 @@ VendoraX is a comprehensive, multi-role e-commerce platform built with the MERN 
 
 ### Key Functionalities
 * **Secure Payments:** Integrated with Razorpay for secure and seamless checkout experiences (supports Cards, UPI, Net Banking, and Wallets).
-* **Real-time Notifications:** Utilizes Socket.io to provide instant updates on order status changes and new orders.
 * **Shopping Cart & Checkout:** Persistent cart state using Zustand and seamless multi-store checkout.
 * **Responsive Design:** A modern, mobile-friendly user interface built with Tailwind CSS.
 * **Image Management:** Integrated with Cloudinary for robust product and store image hosting.
@@ -29,7 +28,6 @@ VendoraX is a comprehensive, multi-role e-commerce platform built with the MERN 
 * Node.js
 * Express.js
 * MongoDB (Mongoose)
-* Socket.io (Real-time WebSockets)
 * Razorpay SDK (Payments)
 * Cloudinary (Image Storage)
 * JSON Web Tokens (JWT) for Authentication

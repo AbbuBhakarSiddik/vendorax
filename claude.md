@@ -135,9 +135,9 @@ These files exist but are **completely empty** (0 bytes):
 | Feature | Status | What's Missing |
 |---|---|---|
 | **Payment Integration** | 🔴 Not started | `paymentService.js` is empty. Checkout currently hardcodes `paymentStatus: 'paid'` and `paymentGateway: 'razorpay'` without any actual payment flow. Razorpay/Stripe SDK not installed. |
-| **Notification Persistence** | 🔴 Not started | `Notification.js` model is empty. Notifications are only in-memory (Zustand store). On page refresh, all notifications are lost. No backend notification CRUD endpoints. |
+| **Notification Persistence** | ❌ Removed | WebSockets and notifications were removed for simplicity to streamline the app. |
 | **Stock Deduction** | 🔴 Missing | When an order is placed, product stock is NOT decremented. Buyers can order more than available stock. No stock validation on order creation. |
-| **Seller Dashboard Stats** | 🔴 Hardcoded | Dashboard stat cards show hardcoded `0` values. Not connected to the analytics API that already exists. |
+| **Seller Dashboard Stats** | ✅ Done | Connected to the analytics API, correctly displays real data. |
 | **Order API Module** | 🔴 Empty | `src/api/order.js` is empty. Order pages use raw `api.get/post` calls directly instead of a centralized API module. |
 
 ### Medium Priority
@@ -149,7 +149,7 @@ These files exist but are **completely empty** (0 bytes):
 | **Product Reviews/Ratings** | 🔴 Not started | No review model, endpoints, or UI. |
 | **Order Detail Page** | 🟡 Missing | Backend `getSingleOrder` exists but no dedicated frontend page for viewing a single order's full details. |
 | **Email Notifications** | 🔴 Not started | No email service. No order confirmation emails, no status update emails. |
-| **Rate Limiting** | 🟡 Installed but unused | `express-rate-limit` is in package.json but never applied to any routes. |
+| **Rate Limiting** | ✅ Done | `express-rate-limit` is configured for global and auth routes in `server.js`. |
 | **Admin Orders Page** | 🟡 Missing | Admin can see recent orders on dashboard, backend `getAllOrders` exists, but there's no dedicated `/admin/orders` page (route exists in admin routes but no page component). |
 | **Search on Home Page** | 🟡 Basic | Search only works on product names. No autocomplete, no search suggestions, no search history. |
 | **Pagination** | 🟡 Partial | Backend supports pagination (`getAllStores` has `page`/`limit`), but frontend doesn't implement page navigation UI. |
@@ -160,15 +160,15 @@ These files exist but are **completely empty** (0 bytes):
 |---|---|---|
 | **Responsive Mobile Nav** | 🔴 Missing | Navbar has no hamburger menu / mobile drawer. Will break on small screens. |
 | **Loading Skeletons** | ✅ Mostly done | Most pages have skeleton loading, but some use basic states. |
-| **Error Boundaries** | 🔴 Missing | No React error boundaries. Unhandled errors will white-screen the app. |
-| **404 Page** | 🟡 Basic | Fallback route redirects to `/`, no custom 404 page. |
+| **Error Boundaries** | ✅ Done | Global React error boundary wrapper added to catch unhandled errors. |
+| **404 Page** | ✅ Done | Custom 404 page created and added to routing. |
 | **Wishlist / Favorites** | 🔴 Not started | No save/favorite product functionality. |
 | **Order Tracking** | 🔴 Not started | No shipment tracking, no delivery date estimates. |
 | **Coupon / Discount System** | 🔴 Not started | No discount or coupon model. |
 | **Multi-image Product View** | ✅ Done | Gallery with thumbnail selector on product page. |
 | **React Query** | 🟡 Installed but unused | `@tanstack/react-query` is in dependencies but never imported. All data fetching uses raw `useEffect` + `useState`. |
 | **React Hot Toast** | 🟡 Installed but unused | `react-hot-toast` is in dependencies but never imported. Using custom notification store instead. |
-| **Console.log Cleanup** | 🟡 Needed | Debug `console.log` statements in `axiosInstance.js` (line 11), `authController.js` (line 23), and `Checkout/index.jsx` (lines 46, 66, 68, 71). |
+| **Console.log Cleanup** | ✅ Done | Debug `console.log` statements removed. |
 | **Environment Variables** | ⚠️ Exposed | `.env` file with real API keys and DB credentials is tracked in git. Should be in `.gitignore`. |
 
 ---
@@ -177,7 +177,7 @@ These files exist but are **completely empty** (0 bytes):
 
 | Bug | Location | Description |
 |---|---|---|
-| **Seller Dashboard hardcoded stats** | `seller/Dashboard/index.jsx:6-11` | Stats array has hardcoded `value: '0'` instead of fetching from analytics API. |
+| **Missing `order.js` API** | `src/api/order.js` | Empty file. Components like `OrderHistory` and `Checkout` use `api.get/post` directly. Inconsistent with the rest of the API layer. |
 | **Missing `order.js` API** | `src/api/order.js` | Empty file. Components like `OrderHistory` and `Checkout` use `api.get/post` directly. Inconsistent with the rest of the API layer. |
 | **No stock validation** | `orderController.js:createOrder` | Orders are created without checking if requested quantity <= available stock. No stock decrement after order. |
 | **Cart stores full product object** | `useCartStore.js` | `addToCart` stores the entire product object including `storeId` which may be a populated object or just an ID, depending on where `addToCart` is called from — inconsistent behavior. |
@@ -194,7 +194,7 @@ These files exist but are **completely empty** (0 bytes):
 | **No rate limiting applied** | 🟡 Medium | `express-rate-limit` is installed but not configured on any route. Login/register endpoints are vulnerable to brute force. |
 | **JWT secret is weak** | 🟡 Medium | JWT secret is a readable string `vendorax_super_secret_key_change_this_later`. Should be a random 256-bit key. |
 | **No CORS restriction in production** | 🟡 Medium | CORS origin hardcoded to `http://localhost:5173`. Needs environment-based configuration for deployment. |
-| **Order status update has no seller check** | 🟡 Medium | `updateOrderStatus` in `orderRoutes.js` only requires `protect` middleware — any authenticated user could update any order's status. Should check that the user is the store owner. |
+| **Order status update has no seller check** | ✅ Fixed | `updateOrderStatus` in `orderRoutes.js` now requires `checkRole('seller')`. |
 
 ---
 
@@ -291,8 +291,6 @@ These files exist but are **completely empty** (0 bytes):
 10. **🟡 Input validation** — Add Joi/Zod schemas for all API endpoints.
 11. **🟢 Mobile responsive navbar** — Add hamburger menu.
 12. **🟢 Remove unused packages** — `@tanstack/react-query`, `react-hot-toast` (or start using them).
-13. **🟢 Clean up console.logs** — Remove debug statements.
-14. **🟢 Error boundaries** — Add React error boundary wrapper.
 
 ---
 

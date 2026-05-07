@@ -15,7 +15,7 @@ router.post('/payment/verify', protect, checkRole('buyer'), verifyAndCreateOrder
 // Order routes
 router.get('/buyer', protect, checkRole('buyer'), getBuyerOrders)
 router.get('/store/:storeId', protect, checkRole('seller'), getStoreOrders)
-router.put('/:id/status', protect, updateOrderStatus)
+router.put('/:id/status', protect, checkRole('seller'), updateOrderStatus)
 router.put('/:id/cancel', protect, checkRole('buyer'), cancelOrder)
 router.get('/:id', protect, getSingleOrder)
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { getAllUsers, deleteUser } from '../../../api/admin'
 import useAuthStore from '../../../store/useAuthStore'
 
@@ -10,7 +10,7 @@ const ManageUsers = () => {
     const [roleFilter, setRoleFilter] = useState('')
     const [search, setSearch] = useState('')
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         try {
             const res = await getAllUsers({ role: roleFilter || undefined })
             setUsers(res.data.users)
@@ -19,9 +19,9 @@ const ManageUsers = () => {
         } finally {
             setLoading(false)
         }
-    }
+    }, [roleFilter])
 
-    useEffect(() => { fetchUsers() }, [roleFilter])
+    useEffect(() => { fetchUsers() }, [fetchUsers])
 
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this user? This cannot be undone.')) return

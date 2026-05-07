@@ -20,7 +20,6 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body
 
-    console.log('Body received:', req.body)
 
     const existingUser = await User.findOne({ email })
     if (existingUser) {
@@ -91,5 +90,34 @@ exports.refreshToken = async (req, res) => {
     res.json({ accessToken, refreshToken: newRefreshToken })
   } catch (error) {
     res.status(401).json({ message: 'Invalid refresh token' })
+  }
+}
+// ─── Profile endpoints ─────────────────────────────────────────────────────
+
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password')
+    res.json({ user })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, savedAddress } = req.body
+    const updates = {}
+    if (name) updates.name = name
+    if (savedAddress) updates.savedAddress = savedAddress
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      updates,
+      { new: true }
+    ).select('-password')
+
+    res.json({ message: 'Profile updated', user })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
   }
 }
