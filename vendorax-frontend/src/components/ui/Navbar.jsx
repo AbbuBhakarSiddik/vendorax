@@ -54,19 +54,20 @@ const Navbar = () => {
                 <>
                   {/* Seller nav */}
                   {user.role === 'seller' && (
-                    <div className="flex items-center gap-1 mr-2">
+                    <div className="flex items-center gap-2 mr-2 rounded-3xl bg-gradient-to-r from-violet-50 via-white to-cyan-50 border border-violet-100 shadow-sm px-2 py-2">
                       {[
-                        { to: '/seller/dashboard', label: 'Dashboard' },
-                        { to: '/seller/products', label: 'Products' },
-                        { to: '/seller/orders', label: 'Orders' },
-                        { to: '/seller/analytics', label: 'Analytics' },
-                        { to: '/seller/ai-tools', label: 'AI Tools' },
+                        { to: '/seller/dashboard', label: 'Dashboard', color: 'from-violet-500 to-purple-600' },
+                        { to: '/seller/products', label: 'Products', color: 'from-fuchsia-500 to-pink-500' },
+                        { to: '/seller/orders', label: 'Orders', color: 'from-emerald-500 to-teal-500' },
+                        { to: '/seller/analytics', label: 'Analytics', color: 'from-blue-500 to-cyan-500' },
+                        { to: '/seller/ai-tools', label: 'AI Tools', color: 'from-amber-500 to-orange-500' },
                       ].map(link => (
                         <Link key={link.to} to={link.to}
-                          className={`text-sm px-3 py-2 rounded-lg transition-all duration-200 font-medium ${location.pathname === link.to
-                            ? 'text-purple-700 bg-purple-50'
-                            : 'text-gray-500 hover:text-purple-600 hover:bg-purple-50/60'
-                            }`}>
+                          className={`flex items-center gap-2 text-sm px-4 py-2 rounded-2xl transition-all duration-200 font-semibold ${location.pathname === link.to
+                            ? `text-white bg-gradient-to-br ${link.color} shadow-lg shadow-purple-500/20`
+                            : `text-gray-600 bg-white/90 hover:text-gray-900 hover:bg-white shadow-sm`}
+                            hover:-translate-y-0.5`}>
+                          <span className={`w-2.5 h-2.5 rounded-full bg-gradient-to-br ${link.color}`} />
                           {link.label}
                         </Link>
                       ))}
