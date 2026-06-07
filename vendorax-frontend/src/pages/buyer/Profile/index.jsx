@@ -11,6 +11,14 @@ const STATUS_COLORS = {
     cancelled: 'bg-red-50 text-red-600 border-red-100'
 }
 
+const STATUS_ICONS = {
+    pending: '🕒',
+    confirmed: '✅',
+    shipped: '🚚',
+    delivered: '📬',
+    cancelled: '❌'
+}
+
 // ─── My Orders Tab ────────────────────────────────────────────────────────────
 const MyOrders = () => {
     const [orders, setOrders] = useState([])
@@ -47,28 +55,30 @@ const MyOrders = () => {
     if (loading) return (
         <div className="space-y-4">
             {[1, 2, 3].map(i => (
-                <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 animate-pulse">
+                <div key={i}
+                    className="bg-gradient-to-br from-purple-50/70 via-white/60 to-indigo-50/70 backdrop-blur-md rounded-2xl border border-purple-100 p-6 animate-pulse shadow-lg shadow-purple-500/10">
                     <div className="flex justify-between mb-4">
-                        <div className="h-4 bg-gray-100 rounded-lg w-1/3" />
-                        <div className="h-5 bg-gray-100 rounded-full w-20" />
+                        <div className="h-4 bg-purple-100/80 rounded-lg w-1/3" />
+                        <div className="h-5 bg-purple-100/80 rounded-full w-20" />
                     </div>
-                    <div className="h-3 bg-gray-100 rounded-lg w-1/2 mb-2" />
-                    <div className="h-3 bg-gray-100 rounded-lg w-1/3" />
+                    <div className="h-3 bg-purple-100/80 rounded-lg w-1/2 mb-2" />
+                    <div className="h-3 bg-purple-100/80 rounded-lg w-1/3" />
                 </div>
             ))}
         </div>
     )
 
     if (orders.length === 0) return (
-        <div className="bg-white rounded-2xl border border-gray-100 p-16 text-center animate-fade-in-up">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center">
-                <span className="text-4xl">📦</span>
+        <div className="bg-gradient-to-br from-purple-50/70 via-white/60 to-indigo-50/70 backdrop-blur-md rounded-2xl border border-purple-100 p-16 text-center animate-fade-in-up shadow-lg shadow-purple-500/10">
+            <div className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center shadow-inner">
+                <span className="text-5xl">📦</span>
             </div>
-            <p className="text-gray-700 font-semibold">No orders yet</p>
-            <p className="text-gray-400 text-sm mt-1 mb-6">Start shopping to see your orders here</p>
+            <p className="text-xl font-bold text-gray-700 mb-2">You haven't placed any orders yet</p>
+            <p className="text-gray-500 text-sm mb-8 max-w-sm mx-auto">Explore thousands of amazing products and support talented creators worldwide.</p>
             <Link to="/"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:from-violet-700 hover:to-purple-700 shadow-lg shadow-purple-500/25 transition-all duration-300 hover:-translate-y-0.5">
-                Browse marketplace
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white px-8 py-3.5 rounded-xl text-sm font-semibold hover:from-violet-700 hover:to-purple-700 shadow-xl shadow-purple-500/25 transition-all duration-300 hover:-translate-y-0.5">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                Discover products
             </Link>
         </div>
     )
@@ -77,33 +87,40 @@ const MyOrders = () => {
         <div className="space-y-4">
             {orders.map((order, i) => (
                 <div key={order._id}
-                    className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 card-hover stagger-child"
+                    className="bg-gradient-to-br from-purple-50/70 via-white/60 to-indigo-50/70 backdrop-blur-md rounded-2xl border border-purple-100 p-5 sm:p-6 card-hover stagger-child shadow-lg shadow-purple-500/10 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300"
                     style={{ animationDelay: `${i * 80}ms` }}>
 
-                    {/* Header */}
+                    {/* Header with status badge & timeline icon */}
                     <div className="flex items-start justify-between mb-4">
                         <div>
-                            <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                                <span className="text-gray-400 font-mono text-xs">#{order._id.slice(-8).toUpperCase()}</span>
-                            </p>
-                            <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                {new Date(order.createdAt).toLocaleDateString('en-IN', {
-                                    day: 'numeric', month: 'short', year: 'numeric'
-                                })}
-                            </p>
+                            <div className="flex items-center gap-3">
+                                <span className="text-2xl">{STATUS_ICONS[order.orderStatus] || '📋'}</span>
+                                <div>
+                                    <p className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                                        Order
+                                        <span className="text-gray-400 font-mono text-xs bg-white/80 px-2 py-0.5 rounded-full">#{order._id.slice(-8).toUpperCase()}</span>
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
+                                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                                            day: 'numeric', month: 'short', year: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <span className={`text-xs font-semibold px-3 py-1.5 rounded-full border ${STATUS_COLORS[order.orderStatus]}`}>
+                        <span className={`text-xs font-semibold px-3 py-1.5 rounded-full border ${STATUS_COLORS[order.orderStatus]} flex items-center gap-1.5`}>
+                            <span className="text-xs">{STATUS_ICONS[order.orderStatus]}</span>
                             {order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)}
                         </span>
                     </div>
 
-                    {/* Store */}
+                    {/* Store link */}
                     {order.storeId && (
                         <Link to={`/store/${order.storeId.storeSlug}`}
-                            className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-700 font-semibold transition-colors mb-3 group">
+                            className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-700 font-semibold transition-colors mb-4 group">
                             <div className="w-4 h-4 rounded-full bg-purple-100 flex items-center justify-center text-[8px] font-bold text-purple-600">
                                 {order.storeId.storeName[0]}
                             </div>
@@ -114,17 +131,20 @@ const MyOrders = () => {
                         </Link>
                     )}
 
-                    {/* Products */}
-                    <div className="bg-gray-50/80 rounded-xl p-3 space-y-1.5 mb-4">
+                    {/* Products list with improved styling */}
+                    <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3.5 mb-4 space-y-2.5 border border-purple-100/50">
                         {order.products.map((p, idx) => (
-                            <div key={idx} className="flex justify-between text-xs text-gray-600">
-                                <span className="font-medium">{p.name} <span className="text-gray-400">× {p.qty}</span></span>
-                                <span className="font-semibold text-gray-700">₹{(p.price * p.qty).toLocaleString()}</span>
+                            <div key={idx} className="flex justify-between items-center text-sm">
+                                <span className="font-medium text-gray-700 flex-1 pr-2">{p.name}</span>
+                                <div className="flex items-center gap-3 text-xs">
+                                    <span className="text-gray-400 bg-white/80 px-2 py-0.5 rounded-full">x{p.qty}</span>
+                                    <span className="font-semibold text-gray-800">₹{(p.price * p.qty).toLocaleString()}</span>
+                                </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* Shipping address (collapsed) */}
+                    {/* Shipping address (collapsible) */}
                     {order.shippingAddress?.address && (
                         <details className="mb-3 group">
                             <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 select-none flex items-center gap-1 font-medium">
@@ -140,16 +160,18 @@ const MyOrders = () => {
                         </details>
                     )}
 
-                    {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    {/* Footer with total and actions */}
+                    <div className="flex items-center justify-between pt-4 border-t border-purple-100/60">
                         <div className="flex items-center gap-3">
-                            <span className="text-sm font-bold text-gray-800">
+                            <span className="text-base font-bold text-gray-800">
                                 ₹{order.totalAmount.toLocaleString()}
                             </span>
-                            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${order.paymentStatus === 'paid'
-                                ? 'bg-emerald-50 text-emerald-600'
-                                : 'bg-amber-50 text-amber-600'}`}>
-                                {order.paymentStatus}
+                            <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full ${
+                                order.paymentStatus === 'paid'
+                                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                                    : 'bg-amber-50 text-amber-600 border border-amber-200'
+                            }`}>
+                                {order.paymentStatus === 'paid' ? 'PAID' : 'UNPAID'}
                             </span>
                         </div>
                         {!['shipped', 'delivered', 'cancelled'].includes(order.orderStatus) && (
@@ -165,7 +187,7 @@ const MyOrders = () => {
                             </button>
                         )}
                         {order.orderStatus === 'delivered' && (
-                            <span className="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                            <span className="text-xs text-emerald-600 font-semibold flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
                                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
@@ -173,10 +195,11 @@ const MyOrders = () => {
                             </span>
                         )}
                         {order.orderStatus === 'cancelled' && (
-                            <span className="text-xs text-gray-400 font-medium">Cancelled</span>
+                            <span className="text-xs text-gray-400 font-medium bg-white/80 px-3 py-1.5 rounded-full border border-gray-200">
+                                Cancelled
+                            </span>
                         )}
                     </div>
-
                 </div>
             ))}
         </div>
@@ -211,7 +234,6 @@ const MyDetails = ({ user, onUpdate }) => {
                 name: form.name,
                 savedAddress: form.address
             })
-            // Update zustand + localStorage with new name
             const stored = JSON.parse(localStorage.getItem('user') || '{}')
             const updatedUser = { ...stored, name: res.data.user.name }
             localStorage.setItem('user', JSON.stringify(updatedUser))
@@ -225,81 +247,81 @@ const MyDetails = ({ user, onUpdate }) => {
         }
     }
 
-    const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/10 transition-all duration-200 bg-gray-50/50 hover:bg-white hover:border-gray-300"
+    const inputClass = "w-full border border-gray-200/70 bg-white/70 backdrop-blur-sm rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-200/50 transition-all duration-200 hover:bg-white hover:shadow-sm placeholder:text-gray-300"
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xl shadow-purple-500/[0.03] animate-fade-in-up">
-            <form onSubmit={handleSave} className="space-y-8">
-
-                {/* Personal info */}
-                <div>
-                    <div className="flex items-center gap-2 mb-4">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-                            <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="space-y-6 animate-fade-in-up">
+            <form onSubmit={handleSave}>
+                {/* Personal Information Card */}
+                <div className="bg-gradient-to-br from-violet-50/80 via-white/70 to-purple-50/80 backdrop-blur-lg rounded-2xl border border-violet-100 p-6 sm:p-8 shadow-lg shadow-violet-500/10 mb-6">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-md shadow-purple-500/20">
+                            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
-                        <h3 className="text-sm font-bold text-gray-800">Personal Info</h3>
+                        <h3 className="text-lg font-bold text-gray-800">Personal Information</h3>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Full name</label>
-                            <input name="name" value={form.name} onChange={handleChange} className={inputClass} />
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Full name</label>
+                            <input name="name" value={form.name} onChange={handleChange} className={inputClass} placeholder="Your full name" />
                         </div>
                         <div>
-                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Email</label>
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Email address</label>
                             <input value={user?.email || ''} disabled
-                                className="w-full border border-gray-100 bg-gray-50 rounded-xl px-4 py-3 text-sm text-gray-400 cursor-not-allowed" />
+                                className="w-full border border-gray-100 bg-gray-50/80 rounded-xl px-4 py-3 text-sm text-gray-400 cursor-not-allowed" />
                         </div>
                     </div>
                 </div>
 
-                {/* Default shipping address */}
-                <div>
-                    <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
-                            <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                {/* Default Shipping Address Card */}
+                <div className="bg-gradient-to-br from-indigo-50/80 via-white/70 to-blue-50/80 backdrop-blur-lg rounded-2xl border border-indigo-100 p-6 sm:p-8 shadow-lg shadow-indigo-500/10 mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-md shadow-emerald-500/20">
+                            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </div>
-                        <h3 className="text-sm font-bold text-gray-800">Default Shipping Address</h3>
+                        <h3 className="text-lg font-bold text-gray-800">Default Shipping Address</h3>
                     </div>
-                    <p className="text-xs text-gray-400 mb-4 ml-9">Auto-filled at checkout so you don't have to retype it</p>
+                    <p className="text-sm text-gray-400 mb-6 ml-11">This address will be pre‑filled at checkout for a faster experience.</p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Full name</label>
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Full Name</label>
                             <input name="fullName" value={form.address.fullName} onChange={handleAddressChange}
                                 placeholder="Name on shipping label" className={inputClass} />
                         </div>
                         <div>
-                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Phone</label>
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Phone</label>
                             <input name="phone" value={form.address.phone} onChange={handleAddressChange}
                                 placeholder="10-digit mobile number" className={inputClass} />
                         </div>
                     </div>
-                    <div className="mt-4">
-                        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Address</label>
-                        <textarea name="address" rows={2} value={form.address.address} onChange={handleAddressChange}
+                    <div className="mt-6">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Address</label>
+                        <textarea name="address" rows={3} value={form.address.address} onChange={handleAddressChange}
                             placeholder="House no, street, area..."
                             className={`${inputClass} resize-none`} />
                     </div>
-                    <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-2 gap-6 mt-6">
                         <div>
-                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">City</label>
-                            <input name="city" value={form.address.city} onChange={handleAddressChange} className={inputClass} />
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">City</label>
+                            <input name="city" value={form.address.city} onChange={handleAddressChange} className={inputClass} placeholder="City" />
                         </div>
                         <div>
-                            <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Pincode</label>
-                            <input name="pincode" value={form.address.pincode} onChange={handleAddressChange} className={inputClass} />
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Pincode</label>
+                            <input name="pincode" value={form.address.pincode} onChange={handleAddressChange} className={inputClass} placeholder="6-digit pincode" />
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4 pt-2">
+                {/* Save Actions */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 backdrop-blur-md rounded-2xl border border-white/50 p-5 shadow-sm">
                     <button type="submit" disabled={saving}
-                        className="bg-gradient-to-r from-violet-600 to-purple-600 text-white px-8 py-3 rounded-xl text-sm font-semibold hover:from-violet-700 hover:to-purple-700 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0 flex items-center gap-2">
+                        className="bg-gradient-to-r from-violet-600 to-purple-600 text-white px-8 py-3.5 rounded-xl text-sm font-semibold hover:from-violet-700 hover:to-purple-700 shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0 flex items-center gap-2">
                         {saving ? (
                             <>
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -315,15 +337,14 @@ const MyDetails = ({ user, onUpdate }) => {
                         )}
                     </button>
                     {success && (
-                        <span className="text-sm text-emerald-600 font-semibold flex items-center gap-1 animate-scale-in">
+                        <span className="text-sm text-emerald-600 font-semibold flex items-center gap-1.5 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200 animate-scale-in">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
-                            Saved successfully
+                            Profile updated successfully
                         </span>
                     )}
                 </div>
-
             </form>
         </div>
     )
@@ -335,6 +356,7 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('orders')
     const [profile, setProfile] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [orderCount, setOrderCount] = useState(null)
 
     useEffect(() => {
         api.get('/auth/me')
@@ -343,55 +365,146 @@ const Profile = () => {
             .finally(() => setLoading(false))
     }, [storeUser])
 
+    // Fetch order count for stats (separate from MyOrders internal fetch)
+    useEffect(() => {
+        api.get('/orders/buyer')
+            .then(res => setOrderCount(res.data.orders?.length || 0))
+            .catch(() => setOrderCount(0))
+    }, [])
+
     const tabs = [
-        { id: 'orders', label: 'My Orders', icon: (
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-        )},
-        { id: 'details', label: 'My Details', icon: (
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-        )}
+        {
+            id: 'orders',
+            label: 'Orders Hub',
+            subtitle: 'Manage & track purchases',
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            )
+        },
+        {
+            id: 'details',
+            label: 'Account Center',
+            subtitle: 'Profile & shipping details',
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            )
+        }
     ]
 
     return (
-        <div className="min-h-screen bg-[#f8f7fa]">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-10">
+        <div className="min-h-screen relative overflow-hidden">
+            {/* Background with floating gradients and decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#f9f8fc] via-white to-purple-50/50 -z-10" />
+            <div className="absolute top-20 left-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-float-smooth -z-10" />
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl animate-float-smooth-delayed -z-10" />
+            <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-violet-200/25 rounded-full blur-3xl animate-float-smooth-slow -z-10" />
 
-                {/* Header */}
-                <div className="flex items-center gap-4 mb-8 animate-fade-in-up">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-2xl font-black shrink-0 shadow-xl shadow-purple-500/20">
-                        {(profile?.name || storeUser?.name || '?')[0].toUpperCase()}
-                    </div>
-                    <div>
-                        <h1 className="text-xl md:text-2xl font-bold text-gray-800">
-                            {loading ? '...' : profile?.name || storeUser?.name}
-                        </h1>
-                        <p className="text-sm text-gray-400 flex items-center gap-1.5 mt-0.5">
-                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            {storeUser?.email}
-                        </p>
+            {/* Decorative icons */}
+            <div className="absolute top-28 left-12 text-4xl opacity-20 select-none pointer-events-none animate-float-smooth-slow" style={{ animationDelay: '1s' }}>🛍️</div>
+            <div className="absolute top-1/3 right-16 text-4xl opacity-20 select-none pointer-events-none animate-float-smooth" style={{ animationDelay: '2s' }}>📦</div>
+            <div className="absolute bottom-24 left-1/4 text-3xl opacity-20 select-none pointer-events-none animate-float-smooth-delayed" style={{ animationDelay: '0.5s' }}>🏪</div>
+            <div className="absolute bottom-40 right-1/4 text-3xl opacity-20 select-none pointer-events-none animate-float-smooth">🚚</div>
+
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 md:py-12 relative z-10">
+
+                {/* ─── Profile Hero Card ──────────────────────────────────────── */}
+                <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 sm:p-8 mb-10 shadow-2xl shadow-purple-500/[0.05] animate-fade-in-up">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-3xl sm:text-4xl font-black shrink-0 shadow-xl shadow-purple-500/30 ring-4 ring-white/50">
+                            {(profile?.name || storeUser?.name || '?')[0].toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex flex-wrap items-center gap-3 mb-2">
+                                <h1 className="text-2xl sm:text-3xl font-black text-gray-800">
+                                    {loading ? '...' : profile?.name || storeUser?.name}
+                                </h1>
+                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 text-purple-700 border border-purple-200/50">
+                                    {storeUser?.role || 'buyer'}
+                                </span>
+                            </div>
+                            <p className="text-base sm:text-lg text-gray-500 font-medium mt-1">
+                                Welcome back 👋 Ready to discover something amazing today?
+                            </p>
+                            <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-500">
+                                <div className="flex items-center gap-1.5">
+                                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    {profile?.createdAt
+                                        ? `Member since ${new Date(profile.createdAt).getFullYear()}`
+                                        : 'Member since 2025'}
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    {storeUser?.email}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex gap-1 bg-gray-100/80 p-1 rounded-xl mb-8 w-fit animate-fade-in-up animation-delay-100">
-                    {tabs.map(tab => (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${activeTab === tab.id
-                                ? 'bg-white text-gray-800 shadow-sm'
-                                : 'text-gray-400 hover:text-gray-600'}`}>
-                            {tab.icon}
-                            {tab.label}
-                        </button>
-                    ))}
+                {/* ─── Stats Section ─────────────────────────────────────────── */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
+                    <div className="bg-white/60 backdrop-blur-lg rounded-2xl border border-white/50 p-5 flex flex-col items-start shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-3 shadow-md">
+                            <span className="text-white text-xl">📦</span>
+                        </div>
+                        <span className="text-2xl font-black text-gray-800">{orderCount !== null ? orderCount : '—'}</span>
+                        <span className="text-xs font-medium text-gray-500 mt-1">Total Orders</span>
+                    </div>
+                    <div className="bg-white/60 backdrop-blur-lg rounded-2xl border border-white/50 p-5 flex flex-col items-start shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center mb-3 shadow-md">
+                            <span className="text-white text-xl">❤️</span>
+                        </div>
+                        <span className="text-2xl font-black text-gray-800">0</span>
+                        <span className="text-xs font-medium text-gray-500 mt-1">Wishlist Items</span>
+                    </div>
+                    <div className="bg-white/60 backdrop-blur-lg rounded-2xl border border-white/50 p-5 flex flex-col items-start shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mb-3 shadow-md">
+                            <span className="text-white text-xl">✅</span>
+                        </div>
+                        <span className="text-2xl font-black text-gray-800">{orderCount !== null ? orderCount : '—'}</span>
+                        <span className="text-xs font-medium text-gray-500 mt-1">Purchases</span>
+                    </div>
+                    <div className="bg-white/60 backdrop-blur-lg rounded-2xl border border-white/50 p-5 flex flex-col items-start shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center mb-3 shadow-md">
+                            <span className="text-white text-xl">⭐</span>
+                        </div>
+                        <span className="text-2xl font-black text-gray-800">Active</span>
+                        <span className="text-xs font-medium text-gray-500 mt-1">Account Status</span>
+                    </div>
                 </div>
 
-                {/* Tab content */}
+                {/* ─── Tabs (Enhanced – not matching main background) ───────── */}
+                <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                    <div className="inline-flex bg-white border border-purple-100 p-1.5 rounded-2xl shadow-md">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`relative flex items-center gap-3 px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                                    activeTab === tab.id
+                                        ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-lg'
+                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                }`}
+                            >
+                                <span>{tab.icon}</span>
+                                <div className="text-left">
+                                    <div>{tab.label}</div>
+                                    <div className={`text-[11px] font-medium ${activeTab === tab.id ? 'text-white/80' : 'text-gray-400'}`}>{tab.subtitle}</div>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ─── Tab Content ──────────────────────────────────────────────── */}
                 {activeTab === 'orders' && <MyOrders />}
                 {activeTab === 'details' && !loading && (
                     <MyDetails user={profile} onUpdate={setProfile} />
