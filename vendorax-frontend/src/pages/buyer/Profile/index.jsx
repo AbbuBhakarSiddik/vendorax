@@ -503,7 +503,6 @@ const Profile = () => {
                         ))}
                     </div>
                 </div>
-
                 {/* ─── Tab Content ──────────────────────────────────────────────── */}
                 {activeTab === 'orders' && <MyOrders />}
                 {activeTab === 'details' && !loading && (
