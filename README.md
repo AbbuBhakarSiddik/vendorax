@@ -51,13 +51,13 @@ VendoraX is a comprehensive, multi-role e-commerce platform built with the MERN 
 * Cloudinary Account (for image hosting)
 
 ### 1. Clone the repository
-\`\`\`bash
+\`\`\`
 git clone https://github.com/AbbuBhakarSiddik/vendorax.git
 cd vendorax
 \`\`\`
 
 ### 2. Backend Setup
-\`\`\`bash
+\`\`\`
 cd vendorax-backend
 npm install
 \`\`\`
@@ -81,13 +81,13 @@ RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 \`\`\`
 
 Start the backend development server:
-\`\`\`bash
+\`\`\`
 npm run dev
 \`\`\`
 
 ### 3. Frontend Setup
 Open a new terminal window:
-\`\`\`bash
+\`\`\`
 cd vendorax-frontend
 npm install
 \`\`\`
@@ -98,7 +98,7 @@ VITE_API_URL=http://localhost:5000/api/v1
 \`\`\`
 
 Start the frontend development server:
-\`\`\`bash
+\`\`\`
 npm run dev
 \`\`\`
 
