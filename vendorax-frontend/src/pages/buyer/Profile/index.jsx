@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../../api/axiosInstance'
+import { getBuyerOrders, cancelOrder } from '../../../api/order'
 import useAuthStore from '../../../store/useAuthStore'
 
 const STATUS_COLORS = {
@@ -28,7 +29,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
         setLoading(true)
         try {
-            const res = await api.get('/orders/buyer')
+            const res = await getBuyerOrders()
             setOrders(res.data.orders)
         } catch {
             setOrders([])
@@ -43,7 +44,7 @@ const MyOrders = () => {
         if (!window.confirm('Cancel this order?')) return
         setCancelling(orderId)
         try {
-            await api.put(`/orders/${orderId}/cancel`)
+            await cancelOrder(orderId)
             fetchOrders()
         } catch (err) {
             alert(err.response?.data?.message || 'Failed to cancel order')
@@ -367,7 +368,7 @@ const Profile = () => {
 
     // Fetch order count for stats (separate from MyOrders internal fetch)
     useEffect(() => {
-        api.get('/orders/buyer')
+        getBuyerOrders()
             .then(res => setOrderCount(res.data.orders?.length || 0))
             .catch(() => setOrderCount(0))
     }, [])

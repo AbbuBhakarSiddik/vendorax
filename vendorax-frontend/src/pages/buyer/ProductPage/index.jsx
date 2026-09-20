@@ -229,6 +229,12 @@ const ProductPage = () => {
                   className="block w-full py-3.5 rounded-xl text-sm font-semibold text-center border-2 border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300 transition-all duration-200">
                   View cart
                 </Link>
+
+                {/* VendoraX Buyer Protection */}
+                <div className="pt-2 flex items-center justify-center gap-2 text-xs text-gray-500 font-medium">
+                  <img src="/logo-icon.png" alt="VendoraX" className="w-4 h-4 object-contain" />
+                  <span>Guaranteed safe checkout via <strong className="text-purple-700">VendoraX</strong></span>
+                </div>
               </div>
             )}
 

@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import api from '../../../api/axiosInstance'
+import { getBuyerOrders, cancelOrder } from '../../../api/order'
 
 const STATUS_COLORS = {
   pending: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400', gradient: 'from-amber-400 to-amber-500' },
@@ -29,7 +29,7 @@ const OrderHistory = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await api.get('/orders/buyer')
+      const res = await getBuyerOrders()
       setOrders(res.data.orders)
     } catch {
       setOrders([])
@@ -44,7 +44,7 @@ const OrderHistory = () => {
     if (!window.confirm('Are you sure you want to cancel this order?')) return
     setCancelling(orderId)
     try {
-      await api.put(`/orders/${orderId}/cancel`)
+      await cancelOrder(orderId)
       fetchOrders()
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to cancel order')
