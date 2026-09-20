@@ -17,8 +17,8 @@ const Cart = () => {
       </div>
 
       <div className="relative z-10 text-center max-w-2xl mx-auto animate-fade-in-up">
-        <div className="w-28 h-28 mx-auto mb-8 rounded-3xl bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center shadow-xl shadow-purple-500/10">
-          <span className="text-6xl">🛒</span>
+        <div className="w-24 h-24 mx-auto mb-8 rounded-3xl bg-white p-4 flex items-center justify-center shadow-xl shadow-purple-500/10 border-2 border-purple-100">
+          <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain" />
         </div>
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Your cart is empty</h2>
         <p className="text-gray-500 text-lg mb-2">Looks like you haven't added any products yet.</p>

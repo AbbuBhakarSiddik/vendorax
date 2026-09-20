@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import useCartStore from '../../../store/useCartStore'
 import useAuthStore from '../../../store/useAuthStore'
 import api from '../../../api/axiosInstance'
+import { initiatePayment, verifyPayment } from '../../../api/order'
 
 const loadRazorpayScript = () =>
   new Promise((resolve) => {
@@ -109,7 +110,7 @@ const Checkout = () => {
           qty: i.qty
         }))
 
-        const { data } = await api.post('/orders/payment/initiate', {
+        const { data } = await initiatePayment({
           storeId,
           products,
           totalAmount: total,
@@ -123,6 +124,7 @@ const Checkout = () => {
             currency: data.currency,
             name: 'VendoraX',
             description: 'Order from store',
+            image: window.location.origin + '/logo-icon.png',
             order_id: data.razorpayOrderId,
             prefill: {
               name: form.fullName,
@@ -132,7 +134,7 @@ const Checkout = () => {
             theme: { color: '#7C3AED' },
             handler: async (response) => {
               try {
-                await api.post('/orders/payment/verify', {
+                await verifyPayment({
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_signature: response.razorpay_signature,
@@ -332,12 +334,13 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Security badge */}
-              <div className="mt-5 flex items-center gap-2 text-xs text-gray-400 bg-gray-50 rounded-lg p-3">
-                <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-                <span>Payments are secured with 256-bit SSL encryption</span>
+              {/* Brand Security badge */}
+              <div className="mt-5 bg-gradient-to-r from-purple-50/70 to-violet-50/70 border border-purple-100/80 rounded-xl p-3 flex items-center gap-3">
+                <img src="/logo-icon.png" alt="VendoraX" className="w-7 h-7 object-contain shrink-0" />
+                <div>
+                  <p className="text-xs font-bold text-gray-800">VendoraX Buyer Protection</p>
+                  <p className="text-[11px] text-gray-500 leading-tight">Secured 256-bit SSL encrypted checkout</p>
+                </div>
               </div>
             </div>
           </div>

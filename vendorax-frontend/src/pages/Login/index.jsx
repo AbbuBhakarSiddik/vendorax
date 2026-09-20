@@ -365,14 +365,14 @@ const Login = () => {
 
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
-          {/* Logo - ENLARGED */}
-          <Link to="/" className="flex items-center gap-4 group w-fit animate-slide-in-left">
-            <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center border-2 border-white/30 group-hover:bg-white/25 group-hover:shadow-2xl group-hover:shadow-white/20 transition-all duration-300">
-              <span className="text-white font-display font-black text-4xl">V</span>
+          {/* Logo - Official Brand Lockup */}
+          <Link to="/" className="flex items-center gap-3.5 group w-fit animate-slide-in-left">
+            <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md p-2.5 flex items-center justify-center border border-white/20 group-hover:bg-white/20 group-hover:shadow-2xl group-hover:shadow-white/20 group-hover:scale-105 transition-all duration-300">
+              <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain drop-shadow-md" />
             </div>
             <div>
-              <span className="text-white font-display font-black text-3xl tracking-tighter block leading-none group-hover:text-brand-100 transition-colors duration-300">VendoraX</span>
-              <span className="text-brand-300/70 text-xs font-semibold tracking-wider">Marketplace Platform</span>
+              <span className="text-white font-display font-black text-2xl tracking-tight block leading-none group-hover:text-brand-100 transition-colors duration-300">VendoraX</span>
+              <span className="text-brand-300/80 text-xs font-semibold tracking-wider mt-1 block">Marketplace Platform</span>
             </div>
           </Link>
 
@@ -472,13 +472,7 @@ const Login = () => {
 
           {/* Mobile logo */}
           <Link to="/" className="lg:hidden flex items-center gap-3 mb-10 group animate-stagger-1">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center group-hover:shadow-lg group-hover:shadow-brand-500/30 transition-all duration-300">
-              <span className="text-white font-display font-black text-xl">V</span>
-            </div>
-            <div>
-              <span className="text-surface-900 font-display font-black text-xl tracking-tight block">VendoraX</span>
-              <span className="text-brand-600 text-xs font-semibold">Marketplace</span>
-            </div>
+            <img src="/logo-horizontal.png" alt="VendoraX" className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
           </Link>
 
           {/* Interactive Welcome Back Header */}

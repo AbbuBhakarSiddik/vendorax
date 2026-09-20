@@ -2,17 +2,24 @@ import { Link } from 'react-router-dom'
 
 const NotFound = () => (
   <div className="min-h-screen bg-[#f8f7fa] flex items-center justify-center px-6">
-    <div className="text-center animate-fade-in-up">
+    <div className="text-center animate-fade-in-up max-w-md mx-auto">
+      {/* Brand Logo Header */}
+      <Link to="/" className="inline-block mb-8 group">
+        <img
+          src="/logo-horizontal.png"
+          alt="VendoraX"
+          className="h-10 w-auto mx-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
+        />
+      </Link>
+
       {/* Animated 404 */}
       <div className="relative mb-8">
         <p className="text-[120px] md:text-[160px] font-black leading-none select-none bg-gradient-to-b from-purple-200 to-purple-50 bg-clip-text text-transparent">
           404
         </p>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-purple-500/30 animate-float">
-            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+          <div className="w-20 h-20 rounded-2xl bg-white p-3.5 flex items-center justify-center shadow-2xl shadow-purple-500/20 border border-purple-100 animate-float">
+            <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain" />
           </div>
         </div>
       </div>

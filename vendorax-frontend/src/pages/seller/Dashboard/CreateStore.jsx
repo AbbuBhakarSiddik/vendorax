@@ -114,6 +114,9 @@ const CreateStore = () => {
             {/* Left Side - Information & Benefits */}
             <div className="animate-fade-in-up">
               <div className="mb-8">
+                <Link to="/" className="inline-block mb-4 group">
+                  <img src="/logo-horizontal.png" alt="VendoraX" className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" />
+                </Link>
                 <h1 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 leading-tight">
                   Launch Your Store
                 </h1>
@@ -126,41 +129,25 @@ const CreateStore = () => {
               <div className="space-y-4 mb-8">
                 {[
                   {
-                    icon: '⚡',
-                    title: 'Lightning Fast Setup',
-                    desc: 'Create your store in under 5 minutes',
-                    color: 'from-amber-400 to-orange-400'
-                  },
-                  {
                     icon: '🎨',
                     title: 'Customizable Design',
                     desc: 'Make it yours with flexible styling options',
                     color: 'from-pink-400 to-rose-400'
                   },
                   {
-                    icon: '🤖',
-                    title: 'AI-Powered Tools',
-                    desc: 'Intelligent product descriptions & analytics',
-                    color: 'from-blue-400 to-cyan-400'
-                  },
-                  {
-                    icon: '💰',
-                    title: 'Keep More Earnings',
-                    desc: 'Low fees, instant payouts every week',
-                    color: 'from-emerald-400 to-green-400'
-                  },
+                    icon: '🚀',
+                    title: 'Global Audience',
+                    desc: 'Reach thousands of active shoppers',
+                    color: 'from-purple-400 to-indigo-400'
+                  }
                 ].map((benefit, idx) => (
-                  <div key={idx}
-                    className="glass-effect rounded-2xl p-5 border-2 border-white/60 hover:border-white/80 transition-all duration-300 hover:shadow-xl animate-slide-in-left group cursor-pointer"
-                    style={{ animationDelay: `${idx * 0.1}s` }}>
-                    <div className="flex items-start gap-4">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                        {benefit.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-gray-900 group-hover:text-purple-700 transition-colors">{benefit.title}</h3>
-                        <p className="text-sm text-gray-600 mt-1">{benefit.desc}</p>
-                      </div>
+                  <div key={idx} className="flex items-start gap-4 p-4 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/80 hover:bg-white/90 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center text-xl shadow-md shrink-0`}>
+                      {benefit.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 text-sm">{benefit.title}</h3>
+                      <p className="text-gray-600 text-xs mt-0.5">{benefit.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -188,8 +175,8 @@ const CreateStore = () => {
                 
                 {/* Header */}
                 <div className="text-center mb-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-500 via-violet-500 to-indigo-600 flex items-center justify-center shadow-2xl shadow-purple-500/40 animate-glow-pulse">
-                    <span className="text-5xl">🏪</span>
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-white p-3.5 flex items-center justify-center shadow-xl shadow-purple-500/15 border-2 border-purple-100 animate-glow-pulse">
+                    <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain" />
                   </div>
                   <h2 className="text-3xl font-black text-gray-900 mb-2">Create Store</h2>
                   <p className="text-gray-600 text-sm">Set up your store on VendoraX in seconds</p>

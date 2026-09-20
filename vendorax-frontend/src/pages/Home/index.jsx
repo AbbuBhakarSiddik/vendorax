@@ -16,9 +16,17 @@ const AboutModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in-up">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto shadow-2xl animate-bounce-in">
-        <div className="sticky top-0 bg-gradient-to-r from-brand-600 to-purple-600 px-8 py-6 flex items-center justify-between">
-          <h2 className="text-2xl font-black text-white">About VendoraX</h2>
-          <button onClick={onClose} className="text-white hover:text-white/80 transition-colors text-2xl">✕</button>
+        <div className="sticky top-0 bg-gradient-to-r from-brand-600 to-purple-600 px-8 py-5 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm p-1.5 flex items-center justify-center border border-white/30 shadow-sm">
+              <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain drop-shadow" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-white leading-tight">About VendoraX</h2>
+              <p className="text-xs text-brand-200 font-medium">The AI-Powered Marketplace</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-white hover:text-white/80 transition-colors text-2xl font-bold">✕</button>
         </div>
         <div className="p-8 space-y-4 text-surface-700 leading-relaxed">
           <p>
@@ -48,9 +56,14 @@ const ContactModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in-up">
       <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl animate-bounce-in">
-        <div className="bg-gradient-to-r from-brand-600 to-purple-600 px-8 py-6 flex items-center justify-between">
-          <h2 className="text-2xl font-black text-white">Contact Us</h2>
-          <button onClick={onClose} className="text-white hover:text-white/80 transition-colors text-2xl">✕</button>
+        <div className="bg-gradient-to-r from-brand-600 to-purple-600 px-8 py-5 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm p-1.5 flex items-center justify-center border border-white/30 shadow-sm">
+              <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain drop-shadow" />
+            </div>
+            <h2 className="text-xl font-black text-white">Contact Us</h2>
+          </div>
+          <button onClick={onClose} className="text-white hover:text-white/80 transition-colors text-2xl font-bold">✕</button>
         </div>
         <div className="p-8 space-y-6">
           <div className="bg-brand-50 rounded-xl p-4 border-2 border-brand-200">
@@ -87,9 +100,14 @@ const TermsModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in-up">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto shadow-2xl animate-bounce-in">
-        <div className="sticky top-0 bg-gradient-to-r from-brand-600 to-purple-600 px-8 py-6 flex items-center justify-between">
-          <h2 className="text-2xl font-black text-white">Terms & Privacy Policy</h2>
-          <button onClick={onClose} className="text-white hover:text-white/80 transition-colors text-2xl">✕</button>
+        <div className="sticky top-0 bg-gradient-to-r from-brand-600 to-purple-600 px-8 py-5 flex items-center justify-between shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm p-1.5 flex items-center justify-center border border-white/30 shadow-sm">
+              <img src="/logo-icon.png" alt="VendoraX" className="w-full h-full object-contain drop-shadow" />
+            </div>
+            <h2 className="text-xl font-black text-white">Terms & Privacy Policy</h2>
+          </div>
+          <button onClick={onClose} className="text-white hover:text-white/80 transition-colors text-2xl font-bold">✕</button>
         </div>
         <div className="p-8 space-y-4 text-surface-700 leading-relaxed">
           <div>
@@ -280,9 +298,10 @@ const Home = () => {
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24 text-center">
-          <div className="animate-stagger-1 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 mb-8">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-ring" />
-            <span className="text-white/90 text-xs font-semibold tracking-wide">✨ AI-Powered Marketplace</span>
+          <div className="animate-stagger-1 inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full py-1.5 px-4 mb-8 shadow-lg shadow-black/5 hover:bg-white/15 transition-all">
+            <img src="/logo-icon.png" alt="VendoraX" className="w-5 h-5 object-contain" />
+            <span className="text-white/95 text-xs font-bold tracking-wide">Official VendoraX AI Marketplace</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-ring" />
           </div>
 
           <div className="animate-stagger-2 mb-6">
@@ -668,14 +687,15 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-purple-600 flex items-center justify-center shadow-lg shadow-brand-500/30">
-                  <span className="text-white font-black text-lg">V</span>
-                </div>
-                <div>
-                  <p className="font-black text-lg text-brand-600">VendoraX</p>
-                  <p className="text-xs text-surface-500 font-bold">Empowering Creators</p>
-                </div>
+              <div className="mb-4">
+                <Link to="/" className="inline-block group">
+                  <img
+                    src="/logo-horizontal.png"
+                    alt="VendoraX"
+                    className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                </Link>
+                <p className="text-xs text-surface-500 font-medium mt-2">Empowering independent creators worldwide.</p>
               </div>
             </div>
             <div>

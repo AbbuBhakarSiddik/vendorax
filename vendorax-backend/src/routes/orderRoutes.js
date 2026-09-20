@@ -7,9 +7,11 @@ const {
 } = require('../controllers/orderController')
 const { protect } = require('../middleware/authMiddleware')
 const { checkRole } = require('../middleware/roleMiddleware')
+const validateRequest = require('../middleware/validateRequest')
+const { initiatePaymentSchema } = require('../validators/orderValidator')
 
 // Payment routes (must come before /:id to avoid conflicts)
-router.post('/payment/initiate', protect, checkRole('buyer'), initiatePayment)
+router.post('/payment/initiate', protect, checkRole('buyer'), validateRequest(initiatePaymentSchema), initiatePayment)
 router.post('/payment/verify', protect, checkRole('buyer'), verifyAndCreateOrder)
 
 // Order routes
